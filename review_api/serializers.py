@@ -1,17 +1,30 @@
-from rest_framework import serializers
+from rest_framework import serializers 
 from .models import Book, Review
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer 
+from django.contrib.auth.models import User 
 
 class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
         fields = '__all__'  # Include all fields of the Book model
 
-class ReviewSerializer(serializers.ModelSerializer):
+# Serializer for Listing Reviews - Display book full details
+class ReviewListSerializer(serializers.ModelSerializer):
+    book = BookSerializer(read_only=True)  # Show full book details
+    user = serializers.StringRelatedField()  # Display username instead of ID
+
     class Meta:
         model = Review
-        fields = ['id', 'book', 'rating', 'comment', 'user']  # ✅ Include 'user'
-        extra_kwargs = {'user': {'read_only': True}}  # ✅ Ensure 'user' is read-only
+        fields = ['id', 'book', 'rating', 'comment', 'user']  # Include book & user details
+
+# Serializer for Creating Reviews - Accept only Book ID
+class ReviewCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        fields = ['id', 'book', 'rating', 'comment'] 
+        extra_kwargs = {
+            'user': {'read_only': True}, 
+        }
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
