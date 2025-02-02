@@ -84,7 +84,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql', # postgreSQL configuration
         'NAME': 'book_review_db',  # database name
         'USER': 'postgres',  # username
-        'PASSWORD': '123',  # password
+        'PASSWORD': 'pgadmin password',  # password
         'HOST': 'localhost', # host
         'PORT': '5432',  # PostgreSQL port
     }
